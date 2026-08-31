@@ -1,0 +1,146 @@
+﻿<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="8/28/2026 3:28:55 PM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="DESKTOP-UG113UO"
+  DTS:CreatorName="DESKTOP-UG113UO\CompuMarts"
+  DTS:DTSID="{980AFB07-CF9A-40B2-B15E-F50BAFB86669}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="17.0.1016.0"
+  DTS:LocaleID="1033"
+  DTS:ObjectName="Load_DimDate"
+  DTS:PackageType="5"
+  DTS:VersionBuild="6"
+  DTS:VersionGUID="{DFCADD8E-80E8-4CF7-A5A2-4B528EA543B8}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[LocalHost.Banking_DWH]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{07B407D3-C2E7-40E6-A96D-AEE84AD2FE68}"
+      DTS:ObjectName="LocalHost.Banking_DWH">
+      <DTS:PropertyExpression
+        DTS:Name="ServerName">@[$Project::DWH_Server]</DTS:PropertyExpression>
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="1"
+          DTS:ConnectRetryInterval="5"
+          DTS:ConnectionString="Data Source=.;Initial Catalog=Banking_DWH;Provider=SQLOLEDB.1;Integrated Security=SSPI;Application Name=SSIS-Load_DimDate-{07B407D3-C2E7-40E6-A96D-AEE84AD2FE68}LocalHost.Banking_DWH;Auto Translate=False;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:Variables>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{4F23CECB-8C42-4F43-8CA8-8AD9E5FB2BB5}"
+      DTS:IncludeInDebugDump="6789"
+      DTS:Namespace="User"
+      DTS:ObjectName="RowCount">
+      <DTS:VariableValue
+        DTS:DataType="3">0</DTS:VariableValue>
+    </DTS:Variable>
+  </DTS:Variables>
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\Execute SQL Task"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{5C555DB1-A119-400D-A2B2-3C3E7D1D55E6}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Execute SQL Task"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2025; © 2025 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{07B407D3-C2E7-40E6-A96D-AEE84AD2FE68}"
+          SQLTask:SqlStatementSource="SELECT COUNT(*) FROM DimDate;"
+          SQLTask:ResultType="ResultSetType_SingleRow" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+          <SQLTask:ResultBinding
+            SQLTask:ResultName="0"
+            SQLTask:DtsVariableName="User::RowCount" />
+        </SQLTask:SqlTaskData>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Generate DimDate"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{DC59FB1C-0E89-468E-8728-E51DBF047BB0}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Generate DimDate"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2025; © 2025 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{07B407D3-C2E7-40E6-A96D-AEE84AD2FE68}"
+          SQLTask:SqlStatementSource="WITH DateRange AS&#xA;(&#xA;    SELECT CAST('2000-01-01' AS DATE) AS DateValue&#xA;&#xA;    UNION ALL&#xA;&#xA;    SELECT DATEADD(DAY, 1, DateValue)&#xA;    FROM DateRange&#xA;    WHERE DateValue &lt; '2030-12-31'&#xA;)&#xA;INSERT INTO [dbo].[DimDate]&#xA;(&#xA;    DateSK,&#xA;    [Date],&#xA;    [Day],&#xA;    DaySuffix,&#xA;    DayOfWeek,&#xA;    DOWInMonth,&#xA;    DayOfYear,&#xA;    WeekOfYear,&#xA;    WeekOfMonth,&#xA;    [Month],&#xA;    MonthName,&#xA;    [Quarter],&#xA;    QuarterName,&#xA;    [Year],&#xA;    StandardDate,&#xA;    HolidayText&#xA;)&#xA;SELECT&#xA;    YEAR(DateValue) * 10000&#xA;        + MONTH(DateValue) * 100&#xA;        + DAY(DateValue)                    AS DateSK,&#xA;&#xA;    DateValue                               AS [Date],&#xA;&#xA;    RIGHT('0' + CAST(DAY(DateValue) AS VARCHAR(2)), 2)&#xA;                                             AS [Day],&#xA;&#xA;    CASE&#xA;        WHEN DAY(DateValue) IN (11, 12, 13) THEN 'th'&#xA;        WHEN DAY(DateValue) % 10 = 1 THEN 'st'&#xA;        WHEN DAY(DateValue) % 10 = 2 THEN 'nd'&#xA;        WHEN DAY(DateValue) % 10 = 3 THEN 'rd'&#xA;        ELSE 'th'&#xA;    END                                      AS DaySuffix,&#xA;&#xA;    DATENAME(WEEKDAY, DateValue)             AS DayOfWeek,&#xA;&#xA;    ((DAY(DateValue) - 1) / 7) + 1           AS DOWInMonth,&#xA;&#xA;    DATEPART(DAYOFYEAR, DateValue)            AS DayOfYear,&#xA;&#xA;    DATEPART(WEEK, DateValue)                 AS WeekOfYear,&#xA;&#xA;    ((DAY(DateValue) - 1) / 7) + 1           AS WeekOfMonth,&#xA;&#xA;    RIGHT('0' + CAST(MONTH(DateValue) AS VARCHAR(2)), 2)&#xA;                                             AS [Month],&#xA;&#xA;    DATENAME(MONTH, DateValue)                AS MonthName,&#xA;&#xA;    DATEPART(QUARTER, DateValue)              AS [Quarter],&#xA;&#xA;    'Q' + CAST(DATEPART(QUARTER, DateValue) AS VARCHAR(1))&#xA;                                             AS QuarterName,&#xA;&#xA;    CAST(YEAR(DateValue) AS CHAR(4))          AS [Year],&#xA;&#xA;    CONVERT(VARCHAR(10), DateValue, 23)       AS StandardDate,&#xA;&#xA;    NULL                                      AS HolidayText&#xA;&#xA;FROM DateRange&#xA;OPTION (MAXRECURSION 0);" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:PrecedenceConstraints>
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint]"
+      DTS:CreationName=""
+      DTS:DTSID="{46B6F9AE-7D19-41C4-82E2-B89A7A66C52B}"
+      DTS:EvalOp="3"
+      DTS:Expression="@[User::RowCount] == 0"
+      DTS:From="Package\Execute SQL Task"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint"
+      DTS:To="Package\Generate DimDate" />
+  </DTS:PrecedenceConstraints>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="8">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mssgm="clr-namespace:Microsoft.SqlServer.Graph.Model;assembly=Microsoft.SqlServer.Graph">
+        <NodeLayout
+          Size="162.4,41.6"
+          Id="Package\Execute SQL Task"
+          TopLeft="256.428571974441,105.529411672205" />
+        <NodeLayout
+          Size="172,41.6"
+          Id="Package\Generate DimDate"
+          TopLeft="255.000000542828,259.9999997721" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint]"
+          TopLeft="339.314286258634,147.129411672205">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,112.870588099895"
+              Start="0,0"
+              End="0,105.370588099895">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,105.370588099895" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <mssgm:EdgeLabel
+              BoundingBox="-8,44.6852940499473,16,16"
+              RelativePosition="Any" />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>

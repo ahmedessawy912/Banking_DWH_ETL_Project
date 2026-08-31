@@ -1,0 +1,1485 @@
+﻿<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="8/29/2026 4:10:06 PM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="DESKTOP-UG113UO"
+  DTS:CreatorName="DESKTOP-UG113UO\CompuMarts"
+  DTS:DTSID="{2B33A430-304D-4E85-9F24-4401900CE24A}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="17.0.1016.0"
+  DTS:LocaleID="1033"
+  DTS:ObjectName="Package1"
+  DTS:PackageType="5"
+  DTS:VersionBuild="9"
+  DTS:VersionGUID="{69972F1F-9AAF-4302-B80D-A8FA6172EE90}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[LocalHost.Banking_DWH]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{6D1E5E08-8115-44B9-86B2-3A7298ED844B}"
+      DTS:ObjectName="LocalHost.Banking_DWH">
+      <DTS:PropertyExpression
+        DTS:Name="ServerName">@[$Project::DWH_Server]</DTS:PropertyExpression>
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="1"
+          DTS:ConnectRetryInterval="5"
+          DTS:ConnectionString="Data Source=.;Initial Catalog=Banking_DWH;Provider=SQLOLEDB.1;Integrated Security=SSPI;Application Name=SSIS-Package1-{6D1E5E08-8115-44B9-86B2-3A7298ED844B}LocalHost.Banking_DWH;Auto Translate=False;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[LocalHost.Union_Bank]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{AD2CCBDA-2FDA-44BF-A9B3-85FD9F4945C2}"
+      DTS:ObjectName="LocalHost.Union_Bank">
+      <DTS:PropertyExpression
+        DTS:Name="ServerName">@[$Project::OLTP_Server]</DTS:PropertyExpression>
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="1"
+          DTS:ConnectRetryInterval="5"
+          DTS:ConnectionString="Data Source=.;Initial Catalog=Union_Bank;Provider=SQLOLEDB.1;Integrated Security=SSPI;Application Name=SSIS-Package1-{AD2CCBDA-2FDA-44BF-A9B3-85FD9F4945C2}LocalHost.Union_Bank;Auto Translate=False;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:Variables />
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\Load_DimTransaction"
+      DTS:CreationName="Microsoft.Pipeline"
+      DTS:Description="Data Flow Task"
+      DTS:DTSID="{FA99082B-FF99-4E82-B469-0C1DC14F33FF}"
+      DTS:ExecutableType="Microsoft.Pipeline"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Load_DimTransaction"
+      DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <pipeline
+          version="1">
+          <components>
+            <component
+              refId="Package\Load_DimTransaction\Conditional Split"
+              componentClassID="Microsoft.ConditionalSplit"
+              contactInfo="Conditional Split;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;0"
+              description="Routes data rows to different outputs depending on the content of the data. Use conditions (SSIS expressions) to specify which rows are routed. For example, separate records that need to be cleaned from those that are ready to be loaded or route only a subset of records."
+              name="Conditional Split"
+              usesDispositions="true">
+              <inputs>
+                <input
+                  refId="Package\Load_DimTransaction\Conditional Split.Inputs[Conditional Split Input]"
+                  description="Input to the Conditional Split Transformation"
+                  name="Conditional Split Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Load_DimTransaction\Conditional Split.Inputs[Conditional Split Input].Columns[TransactionType]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="100"
+                      cachedName="TransactionType"
+                      lineageId="Package\Load_DimTransaction\OLE DB Source.Outputs[OLE DB Source Output].Columns[TransactionType]" />
+                    <inputColumn
+                      refId="Package\Load_DimTransaction\Conditional Split.Inputs[Conditional Split Input].Columns[TransactionType1]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="100"
+                      cachedName="TransactionType"
+                      lineageId="Package\Load_DimTransaction\Lookup.Outputs[Lookup Match Output].Columns[TransactionType]" />
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Load_DimTransaction\Conditional Split.Outputs[scd2]"
+                  description="Output 1 of the Conditional Split Transformation"
+                  errorOrTruncationOperation="Computation"
+                  errorRowDisposition="FailComponent"
+                  exclusionGroup="1"
+                  name="scd2"
+                  synchronousInputId="Package\Load_DimTransaction\Conditional Split.Inputs[Conditional Split Input]"
+                  truncationRowDisposition="FailComponent">
+                  <properties>
+                    <property
+                      containsID="true"
+                      dataType="System.String"
+                      description="Specifies the expression. This expression version uses lineage identifiers instead of column names."
+                      name="Expression">#{Package\Load_DimTransaction\OLE DB Source.Outputs[OLE DB Source Output].Columns[TransactionType]} != #{Package\Load_DimTransaction\Lookup.Outputs[Lookup Match Output].Columns[TransactionType]}</property>
+                    <property
+                      containsID="true"
+                      dataType="System.String"
+                      description="Specifies the friendly version of the expression. This expression version uses column names."
+                      expressionType="Notify"
+                      name="FriendlyExpression">[OLE DB Source].TransactionType != Lookup.TransactionType</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the position of the condition in the list of conditions that the transformation evaluates. The evaluation order is from the lowest to the highest value."
+                      name="EvaluationOrder">0</property>
+                  </properties>
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Load_DimTransaction\Conditional Split.Outputs[Conditional Split Default Output]"
+                  description="Default Output of the Conditional Split Transformation"
+                  exclusionGroup="1"
+                  name="Conditional Split Default Output"
+                  synchronousInputId="Package\Load_DimTransaction\Conditional Split.Inputs[Conditional Split Input]">
+                  <properties>
+                    <property
+                      dataType="System.Boolean"
+                      name="IsDefaultOut">true</property>
+                  </properties>
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Load_DimTransaction\Conditional Split.Outputs[Conditional Split Error Output]"
+                  description="Error Output of the Conditional Split Transformation"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Conditional Split Error Output"
+                  synchronousInputId="Package\Load_DimTransaction\Conditional Split.Inputs[Conditional Split Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load_DimTransaction\Conditional Split.Outputs[Conditional Split Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Load_DimTransaction\Conditional Split.Outputs[Conditional Split Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Load_DimTransaction\Conditional Split.Outputs[Conditional Split Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Load_DimTransaction\Conditional Split.Outputs[Conditional Split Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Load_DimTransaction\Derived Column"
+              componentClassID="Microsoft.DerivedColumn"
+              contactInfo="Derived Column;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;0"
+              description="Creates new column values by applying expressions to transformation input columns. Create new columns or overwrite existing ones. For example, concatenate the values from the 'first name' and 'last name' column to make a 'full name' column."
+              name="Derived Column"
+              usesDispositions="true">
+              <inputs>
+                <input
+                  refId="Package\Load_DimTransaction\Derived Column.Inputs[Derived Column Input]"
+                  description="Input to the Derived Column Transformation"
+                  name="Derived Column Input">
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Load_DimTransaction\Derived Column.Outputs[Derived Column Output]"
+                  description="Default Output of the Derived Column Transformation"
+                  exclusionGroup="1"
+                  name="Derived Column Output"
+                  synchronousInputId="Package\Load_DimTransaction\Derived Column.Inputs[Derived Column Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load_DimTransaction\Derived Column.Outputs[Derived Column Output].Columns[StartDate]"
+                      dataType="dbTimeStamp"
+                      errorOrTruncationOperation="Computation"
+                      errorRowDisposition="FailComponent"
+                      lineageId="Package\Load_DimTransaction\Derived Column.Outputs[Derived Column Output].Columns[StartDate]"
+                      name="StartDate"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Derived Column Expression"
+                          name="Expression">[GETDATE]()</property>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Derived Column Friendly Expression"
+                          expressionType="Notify"
+                          name="FriendlyExpression">GETDATE()</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Load_DimTransaction\Derived Column.Outputs[Derived Column Output].Columns[EndDate]"
+                      dataType="dbTimeStamp"
+                      errorOrTruncationOperation="Computation"
+                      errorRowDisposition="FailComponent"
+                      lineageId="Package\Load_DimTransaction\Derived Column.Outputs[Derived Column Output].Columns[EndDate]"
+                      name="EndDate"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Derived Column Expression"
+                          name="Expression">NULL(DT_DBTIMESTAMP)</property>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Derived Column Friendly Expression"
+                          expressionType="Notify"
+                          name="FriendlyExpression">NULL(DT_DBTIMESTAMP)</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Load_DimTransaction\Derived Column.Outputs[Derived Column Output].Columns[IsCurrent]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Computation"
+                      errorRowDisposition="FailComponent"
+                      lineageId="Package\Load_DimTransaction\Derived Column.Outputs[Derived Column Output].Columns[IsCurrent]"
+                      name="IsCurrent"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Derived Column Expression"
+                          name="Expression">1</property>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Derived Column Friendly Expression"
+                          expressionType="Notify"
+                          name="FriendlyExpression">1</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Load_DimTransaction\Derived Column.Outputs[Derived Column Error Output]"
+                  description="Error Output of the Derived Column Transformation"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Derived Column Error Output"
+                  synchronousInputId="Package\Load_DimTransaction\Derived Column.Inputs[Derived Column Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load_DimTransaction\Derived Column.Outputs[Derived Column Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Load_DimTransaction\Derived Column.Outputs[Derived Column Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Load_DimTransaction\Derived Column.Outputs[Derived Column Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Load_DimTransaction\Derived Column.Outputs[Derived Column Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Load_DimTransaction\Derived Column 1"
+              componentClassID="Microsoft.DerivedColumn"
+              contactInfo="Derived Column;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;0"
+              description="Creates new column values by applying expressions to transformation input columns. Create new columns or overwrite existing ones. For example, concatenate the values from the 'first name' and 'last name' column to make a 'full name' column."
+              name="Derived Column 1"
+              usesDispositions="true">
+              <inputs>
+                <input
+                  refId="Package\Load_DimTransaction\Derived Column 1.Inputs[Derived Column Input]"
+                  description="Input to the Derived Column Transformation"
+                  name="Derived Column Input">
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Load_DimTransaction\Derived Column 1.Outputs[Derived Column Output]"
+                  description="Default Output of the Derived Column Transformation"
+                  exclusionGroup="1"
+                  name="Derived Column Output"
+                  synchronousInputId="Package\Load_DimTransaction\Derived Column 1.Inputs[Derived Column Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load_DimTransaction\Derived Column 1.Outputs[Derived Column Output].Columns[StartDate]"
+                      dataType="dbTimeStamp"
+                      errorOrTruncationOperation="Computation"
+                      errorRowDisposition="FailComponent"
+                      lineageId="Package\Load_DimTransaction\Derived Column 1.Outputs[Derived Column Output].Columns[StartDate]"
+                      name="StartDate"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Derived Column Expression"
+                          name="Expression">[GETDATE]()</property>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Derived Column Friendly Expression"
+                          expressionType="Notify"
+                          name="FriendlyExpression">GETDATE()</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Load_DimTransaction\Derived Column 1.Outputs[Derived Column Output].Columns[EndDate]"
+                      dataType="dbTimeStamp"
+                      errorOrTruncationOperation="Computation"
+                      errorRowDisposition="FailComponent"
+                      lineageId="Package\Load_DimTransaction\Derived Column 1.Outputs[Derived Column Output].Columns[EndDate]"
+                      name="EndDate"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Derived Column Expression"
+                          name="Expression">NULL(DT_DBTIMESTAMP)</property>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Derived Column Friendly Expression"
+                          expressionType="Notify"
+                          name="FriendlyExpression">NULL(DT_DBTIMESTAMP)</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Load_DimTransaction\Derived Column 1.Outputs[Derived Column Output].Columns[IsCurrent]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Computation"
+                      errorRowDisposition="FailComponent"
+                      lineageId="Package\Load_DimTransaction\Derived Column 1.Outputs[Derived Column Output].Columns[IsCurrent]"
+                      name="IsCurrent"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Derived Column Expression"
+                          name="Expression">1</property>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Derived Column Friendly Expression"
+                          expressionType="Notify"
+                          name="FriendlyExpression">1</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Load_DimTransaction\Derived Column 1.Outputs[Derived Column Error Output]"
+                  description="Error Output of the Derived Column Transformation"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Derived Column Error Output"
+                  synchronousInputId="Package\Load_DimTransaction\Derived Column 1.Inputs[Derived Column Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load_DimTransaction\Derived Column 1.Outputs[Derived Column Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Load_DimTransaction\Derived Column 1.Outputs[Derived Column Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Load_DimTransaction\Derived Column 1.Outputs[Derived Column Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Load_DimTransaction\Derived Column 1.Outputs[Derived Column Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Load_DimTransaction\Lookup"
+              componentClassID="Microsoft.Lookup"
+              contactInfo="Lookup;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;6"
+              description="Joins additional columns to the data flow by looking up values in a table. For example, join to the 'employee id' column the employees table to get 'hire date' and 'employee name'. We recommend this transformation when the lookup table can fit into memory."
+              name="Lookup"
+              usesDispositions="true"
+              version="6">
+              <properties>
+                <property
+                  dataType="System.String"
+                  description="Specifies the SQL statement that generates the lookup table."
+                  expressionType="Notify"
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">select * from [dbo].[Dim transaction]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies a SQL statement that uses parameters to generate the lookup table."
+                  expressionType="Notify"
+                  name="SqlCommandParam"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">select * from (select * from [dbo].[Dim transaction]) [refTable]
+where [refTable].[TransactionBK] = ?</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the type of connection used to access the reference dataset."
+                  name="ConnectionType"
+                  typeConverter="LookupConnectionType">0</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the cache type of the lookup table."
+                  name="CacheType"
+                  typeConverter="CacheType">0</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies how the Lookup transformation handles rows without matching entries in the reference data set."
+                  name="NoMatchBehavior"
+                  typeConverter="LookupNoMatchBehavior">1</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the percentage of the cache that is allocated for rows with no matching entries in the reference dataset."
+                  name="NoMatchCachePercentage">0</property>
+                <property
+                  dataType="System.Int32"
+                  description="Maximum Memory Usage for Reference Cache on a 32 bit platform."
+                  name="MaxMemoryUsage">25</property>
+                <property
+                  dataType="System.Int64"
+                  description="Maximum Memory Usage for Reference Cache on a 64 bit platform."
+                  name="MaxMemoryUsage64">25</property>
+                <property
+                  dataType="System.String"
+                  description="Indicates whether to reference metadata in an XML format."
+                  name="ReferenceMetadataXml">&lt;referenceMetadata&gt;&lt;referenceColumns&gt;&lt;referenceColumn name="TransactionID" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="TransactionBK" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="TransactionType" dataType="DT_STR" length="100" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="StartDate" dataType="DT_WSTR" length="10" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="EndDate" dataType="DT_WSTR" length="10" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="IsCurrent" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;/referenceColumns&gt;&lt;/referenceMetadata&gt;</property>
+                <property
+                  containsID="true"
+                  dataType="System.String"
+                  description="Specifies the list of lineage identifiers that map to the parameters that the SQL statement in the SQLCommand property uses. Entries in the list are separated by semicolons."
+                  name="ParameterMap">#{Package\Load_DimTransaction\OLE DB Source.Outputs[OLE DB Source Output].Columns[Transaction_Type_Id]};</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Determines whether duplicate keys in the reference data should be treated as errors when full cache mode is used."
+                  name="TreatDuplicateKeysAsError">false</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Load_DimTransaction\Lookup.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[LocalHost.Banking_DWH]"
+                  connectionManagerRefId="Package.ConnectionManagers[LocalHost.Banking_DWH]"
+                  description="Connection manager used to access lookup data."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\Load_DimTransaction\Lookup.Inputs[Lookup Input]"
+                  name="Lookup Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Load_DimTransaction\Lookup.Inputs[Lookup Input].Columns[Transaction_Type_Id]"
+                      cachedDataType="i4"
+                      cachedName="Transaction_Type_Id"
+                      lineageId="Package\Load_DimTransaction\OLE DB Source.Outputs[OLE DB Source Output].Columns[Transaction_Type_Id]">
+                      <properties>
+                        <property
+                          dataType="System.String"
+                          description="Specifies the column in the reference table that a column joins."
+                          name="JoinToReferenceColumn">TransactionBK</property>
+                        <property
+                          dataType="System.Null"
+                          description="Specifies the column in the reference table from which a column is copied."
+                          name="CopyFromReferenceColumn" />
+                      </properties>
+                    </inputColumn>
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Load_DimTransaction\Lookup.Outputs[Lookup Match Output]"
+                  errorOrTruncationOperation="Lookup"
+                  exclusionGroup="1"
+                  name="Lookup Match Output"
+                  synchronousInputId="Package\Load_DimTransaction\Lookup.Inputs[Lookup Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load_DimTransaction\Lookup.Outputs[Lookup Match Output].Columns[TransactionID]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Copy Column"
+                      lineageId="Package\Load_DimTransaction\Lookup.Outputs[Lookup Match Output].Columns[TransactionID]"
+                      name="TransactionID"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          dataType="System.String"
+                          description="Specifies the column in the reference table from which a column is copied."
+                          name="CopyFromReferenceColumn">TransactionID</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Load_DimTransaction\Lookup.Outputs[Lookup Match Output].Columns[TransactionType]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Copy Column"
+                      length="100"
+                      lineageId="Package\Load_DimTransaction\Lookup.Outputs[Lookup Match Output].Columns[TransactionType]"
+                      name="TransactionType"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          dataType="System.String"
+                          description="Specifies the column in the reference table from which a column is copied."
+                          name="CopyFromReferenceColumn">TransactionType</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Load_DimTransaction\Lookup.Outputs[Lookup No Match Output]"
+                  description="The Lookup output that handles rows with no matching entries in the reference dataset. Use this output when the NoMatchBehavior property is set to &quot;Send rows with no matching entries to the no match output.&quot;"
+                  exclusionGroup="1"
+                  name="Lookup No Match Output"
+                  synchronousInputId="Package\Load_DimTransaction\Lookup.Inputs[Lookup Input]">
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Load_DimTransaction\Lookup.Outputs[Lookup Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Lookup Error Output"
+                  synchronousInputId="Package\Load_DimTransaction\Lookup.Inputs[Lookup Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load_DimTransaction\Lookup.Outputs[Lookup Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Load_DimTransaction\Lookup.Outputs[Lookup Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Load_DimTransaction\Lookup.Outputs[Lookup Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Load_DimTransaction\Lookup.Outputs[Lookup Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Load_DimTransaction\OLE DB Command"
+              componentClassID="Microsoft.OLEDBCommand"
+              contactInfo="OLE DB Command;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;2"
+              description="Runs an SQL statement for each row in a data flow. For example, call a 'new employee setup' stored procedure for each row in the 'new employees' table. Note: running an SQL statement for each row of a large data flow may take a long time."
+              name="OLE DB Command"
+              usesDispositions="true"
+              version="2">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  expressionType="Notify"
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">update [Dim transaction]
+set EndDate = GETDATE() - 1,
+IsCurrent = 0
+where EndDate IS NULL
+and TransactionID = ?</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Load_DimTransaction\OLE DB Command.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[LocalHost.Banking_DWH]"
+                  connectionManagerRefId="Package.ConnectionManagers[LocalHost.Banking_DWH]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\Load_DimTransaction\OLE DB Command.Inputs[OLE DB Command Input]"
+                  errorOrTruncationOperation="Command Execution"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="OLE DB Command Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Load_DimTransaction\OLE DB Command.Inputs[OLE DB Command Input].Columns[TransactionID]"
+                      cachedDataType="i4"
+                      cachedName="TransactionID"
+                      externalMetadataColumnId="Package\Load_DimTransaction\OLE DB Command.Inputs[OLE DB Command Input].ExternalColumns[Param_0]"
+                      lineageId="Package\Load_DimTransaction\Lookup.Outputs[Lookup Match Output].Columns[TransactionID]" />
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Load_DimTransaction\OLE DB Command.Inputs[OLE DB Command Input].ExternalColumns[Param_0]"
+                      dataType="i4"
+                      name="Param_0">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
+                          name="DBParamInfoFlags">17</property>
+                      </properties>
+                    </externalMetadataColumn>
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Load_DimTransaction\OLE DB Command.Outputs[OLE DB Command Output]"
+                  exclusionGroup="1"
+                  name="OLE DB Command Output"
+                  synchronousInputId="Package\Load_DimTransaction\OLE DB Command.Inputs[OLE DB Command Input]">
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Load_DimTransaction\OLE DB Command.Outputs[OLE DB Command Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="OLE DB Command Error Output"
+                  synchronousInputId="Package\Load_DimTransaction\OLE DB Command.Inputs[OLE DB Command Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load_DimTransaction\OLE DB Command.Outputs[OLE DB Command Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Load_DimTransaction\OLE DB Command.Outputs[OLE DB Command Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Load_DimTransaction\OLE DB Command.Outputs[OLE DB Command Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Load_DimTransaction\OLE DB Command.Outputs[OLE DB Command Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Load_DimTransaction\OLE DB Destination"
+              componentClassID="Microsoft.OLEDBDestination"
+              contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4"
+              description="OLE DB Destination"
+              name="OLE DB Destination"
+              usesDispositions="true"
+              version="4">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">[dbo].[Dim transaction]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">3</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the values supplied for identity columns will be copied to the destination. If false, values for identity columns will be auto-generated at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepIdentity">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the columns containing null will have null inserted in the destination. If false, columns containing null will have their default values inserted at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepNulls">false</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies options to be used with fast load.  Applies only if fast load is turned on."
+                  name="FastLoadOptions">TABLOCK,CHECK_CONSTRAINTS</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies when commits are issued during data insertion.  A value of 0 specifies that one commit will be issued at the end of data insertion.  Applies only if fast load is turned on."
+                  name="FastLoadMaxInsertCommitSize">2147483647</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Load_DimTransaction\OLE DB Destination.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[LocalHost.Banking_DWH]"
+                  connectionManagerRefId="Package.ConnectionManagers[LocalHost.Banking_DWH]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\Load_DimTransaction\OLE DB Destination.Inputs[OLE DB Destination Input]"
+                  errorOrTruncationOperation="Insert"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="OLE DB Destination Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Load_DimTransaction\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[TransactionType]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="100"
+                      cachedName="TransactionType"
+                      externalMetadataColumnId="Package\Load_DimTransaction\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[TransactionType]"
+                      lineageId="Package\Load_DimTransaction\OLE DB Source.Outputs[OLE DB Source Output].Columns[TransactionType]" />
+                    <inputColumn
+                      refId="Package\Load_DimTransaction\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[StartDate]"
+                      cachedDataType="dbTimeStamp"
+                      cachedName="StartDate"
+                      externalMetadataColumnId="Package\Load_DimTransaction\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[StartDate]"
+                      lineageId="Package\Load_DimTransaction\Derived Column.Outputs[Derived Column Output].Columns[StartDate]" />
+                    <inputColumn
+                      refId="Package\Load_DimTransaction\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[EndDate]"
+                      cachedDataType="dbTimeStamp"
+                      cachedName="EndDate"
+                      externalMetadataColumnId="Package\Load_DimTransaction\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[EndDate]"
+                      lineageId="Package\Load_DimTransaction\Derived Column.Outputs[Derived Column Output].Columns[EndDate]" />
+                    <inputColumn
+                      refId="Package\Load_DimTransaction\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[IsCurrent]"
+                      cachedDataType="i4"
+                      cachedName="IsCurrent"
+                      externalMetadataColumnId="Package\Load_DimTransaction\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[IsCurrent]"
+                      lineageId="Package\Load_DimTransaction\Derived Column.Outputs[Derived Column Output].Columns[IsCurrent]" />
+                    <inputColumn
+                      refId="Package\Load_DimTransaction\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[Transaction_Type_Id]"
+                      cachedDataType="i4"
+                      cachedName="Transaction_Type_Id"
+                      externalMetadataColumnId="Package\Load_DimTransaction\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[TransactionBK]"
+                      lineageId="Package\Load_DimTransaction\OLE DB Source.Outputs[OLE DB Source Output].Columns[Transaction_Type_Id]" />
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Load_DimTransaction\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[TransactionID]"
+                      dataType="i4"
+                      name="TransactionID" />
+                    <externalMetadataColumn
+                      refId="Package\Load_DimTransaction\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[TransactionBK]"
+                      dataType="i4"
+                      name="TransactionBK" />
+                    <externalMetadataColumn
+                      refId="Package\Load_DimTransaction\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[TransactionType]"
+                      codePage="1252"
+                      dataType="str"
+                      length="100"
+                      name="TransactionType" />
+                    <externalMetadataColumn
+                      refId="Package\Load_DimTransaction\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[StartDate]"
+                      dataType="wstr"
+                      length="10"
+                      name="StartDate" />
+                    <externalMetadataColumn
+                      refId="Package\Load_DimTransaction\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[EndDate]"
+                      dataType="wstr"
+                      length="10"
+                      name="EndDate" />
+                    <externalMetadataColumn
+                      refId="Package\Load_DimTransaction\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[IsCurrent]"
+                      dataType="i4"
+                      name="IsCurrent" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Load_DimTransaction\OLE DB Destination.Outputs[OLE DB Destination Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="OLE DB Destination Error Output"
+                  synchronousInputId="Package\Load_DimTransaction\OLE DB Destination.Inputs[OLE DB Destination Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load_DimTransaction\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Load_DimTransaction\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Load_DimTransaction\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Load_DimTransaction\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Load_DimTransaction\OLE DB Destination 1"
+              componentClassID="Microsoft.OLEDBDestination"
+              contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4"
+              description="OLE DB Destination"
+              name="OLE DB Destination 1"
+              usesDispositions="true"
+              version="4">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">[dbo].[Dim transaction]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">3</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the values supplied for identity columns will be copied to the destination. If false, values for identity columns will be auto-generated at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepIdentity">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the columns containing null will have null inserted in the destination. If false, columns containing null will have their default values inserted at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepNulls">false</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies options to be used with fast load.  Applies only if fast load is turned on."
+                  name="FastLoadOptions">TABLOCK,CHECK_CONSTRAINTS</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies when commits are issued during data insertion.  A value of 0 specifies that one commit will be issued at the end of data insertion.  Applies only if fast load is turned on."
+                  name="FastLoadMaxInsertCommitSize">2147483647</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Load_DimTransaction\OLE DB Destination 1.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[LocalHost.Banking_DWH]"
+                  connectionManagerRefId="Package.ConnectionManagers[LocalHost.Banking_DWH]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\Load_DimTransaction\OLE DB Destination 1.Inputs[OLE DB Destination Input]"
+                  errorOrTruncationOperation="Insert"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="OLE DB Destination Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Load_DimTransaction\OLE DB Destination 1.Inputs[OLE DB Destination Input].Columns[StartDate]"
+                      cachedDataType="dbTimeStamp"
+                      cachedName="StartDate"
+                      externalMetadataColumnId="Package\Load_DimTransaction\OLE DB Destination 1.Inputs[OLE DB Destination Input].ExternalColumns[StartDate]"
+                      lineageId="Package\Load_DimTransaction\Derived Column 1.Outputs[Derived Column Output].Columns[StartDate]" />
+                    <inputColumn
+                      refId="Package\Load_DimTransaction\OLE DB Destination 1.Inputs[OLE DB Destination Input].Columns[EndDate]"
+                      cachedDataType="dbTimeStamp"
+                      cachedName="EndDate"
+                      externalMetadataColumnId="Package\Load_DimTransaction\OLE DB Destination 1.Inputs[OLE DB Destination Input].ExternalColumns[EndDate]"
+                      lineageId="Package\Load_DimTransaction\Derived Column 1.Outputs[Derived Column Output].Columns[EndDate]" />
+                    <inputColumn
+                      refId="Package\Load_DimTransaction\OLE DB Destination 1.Inputs[OLE DB Destination Input].Columns[IsCurrent]"
+                      cachedDataType="i4"
+                      cachedName="IsCurrent"
+                      externalMetadataColumnId="Package\Load_DimTransaction\OLE DB Destination 1.Inputs[OLE DB Destination Input].ExternalColumns[IsCurrent]"
+                      lineageId="Package\Load_DimTransaction\Derived Column 1.Outputs[Derived Column Output].Columns[IsCurrent]" />
+                    <inputColumn
+                      refId="Package\Load_DimTransaction\OLE DB Destination 1.Inputs[OLE DB Destination Input].Columns[Transaction_Type_Id]"
+                      cachedDataType="i4"
+                      cachedName="Transaction_Type_Id"
+                      externalMetadataColumnId="Package\Load_DimTransaction\OLE DB Destination 1.Inputs[OLE DB Destination Input].ExternalColumns[TransactionBK]"
+                      lineageId="Package\Load_DimTransaction\OLE DB Source.Outputs[OLE DB Source Output].Columns[Transaction_Type_Id]" />
+                    <inputColumn
+                      refId="Package\Load_DimTransaction\OLE DB Destination 1.Inputs[OLE DB Destination Input].Columns[TransactionType]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="100"
+                      cachedName="TransactionType"
+                      externalMetadataColumnId="Package\Load_DimTransaction\OLE DB Destination 1.Inputs[OLE DB Destination Input].ExternalColumns[TransactionType]"
+                      lineageId="Package\Load_DimTransaction\OLE DB Source.Outputs[OLE DB Source Output].Columns[TransactionType]" />
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Load_DimTransaction\OLE DB Destination 1.Inputs[OLE DB Destination Input].ExternalColumns[TransactionID]"
+                      dataType="i4"
+                      name="TransactionID" />
+                    <externalMetadataColumn
+                      refId="Package\Load_DimTransaction\OLE DB Destination 1.Inputs[OLE DB Destination Input].ExternalColumns[TransactionBK]"
+                      dataType="i4"
+                      name="TransactionBK" />
+                    <externalMetadataColumn
+                      refId="Package\Load_DimTransaction\OLE DB Destination 1.Inputs[OLE DB Destination Input].ExternalColumns[TransactionType]"
+                      codePage="1252"
+                      dataType="str"
+                      length="100"
+                      name="TransactionType" />
+                    <externalMetadataColumn
+                      refId="Package\Load_DimTransaction\OLE DB Destination 1.Inputs[OLE DB Destination Input].ExternalColumns[StartDate]"
+                      dataType="wstr"
+                      length="10"
+                      name="StartDate" />
+                    <externalMetadataColumn
+                      refId="Package\Load_DimTransaction\OLE DB Destination 1.Inputs[OLE DB Destination Input].ExternalColumns[EndDate]"
+                      dataType="wstr"
+                      length="10"
+                      name="EndDate" />
+                    <externalMetadataColumn
+                      refId="Package\Load_DimTransaction\OLE DB Destination 1.Inputs[OLE DB Destination Input].ExternalColumns[IsCurrent]"
+                      dataType="i4"
+                      name="IsCurrent" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Load_DimTransaction\OLE DB Destination 1.Outputs[OLE DB Destination Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="OLE DB Destination Error Output"
+                  synchronousInputId="Package\Load_DimTransaction\OLE DB Destination 1.Inputs[OLE DB Destination Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load_DimTransaction\OLE DB Destination 1.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Load_DimTransaction\OLE DB Destination 1.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Load_DimTransaction\OLE DB Destination 1.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Load_DimTransaction\OLE DB Destination 1.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Load_DimTransaction\OLE DB Source"
+              componentClassID="Microsoft.OLEDBSource"
+              contactInfo="OLE DB Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;7"
+              description="OLE DB Source"
+              name="OLE DB Source"
+              usesDispositions="true"
+              version="7">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset"></property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">SELECT Transaction_Type_Id, TransactionType FROM Transcations</property>
+                <property
+                  dataType="System.String"
+                  description="The variable that contains the SQL command to be executed."
+                  name="SqlCommandVariable"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">2</property>
+                <property
+                  dataType="System.String"
+                  description="The mappings between the parameters in the SQL command and variables."
+                  name="ParameterMapping"></property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Load_DimTransaction\OLE DB Source.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[LocalHost.Union_Bank]"
+                  connectionManagerRefId="Package.ConnectionManagers[LocalHost.Union_Bank]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <outputs>
+                <output
+                  refId="Package\Load_DimTransaction\OLE DB Source.Outputs[OLE DB Source Output]"
+                  name="OLE DB Source Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load_DimTransaction\OLE DB Source.Outputs[OLE DB Source Output].Columns[Transaction_Type_Id]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load_DimTransaction\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Transaction_Type_Id]"
+                      lineageId="Package\Load_DimTransaction\OLE DB Source.Outputs[OLE DB Source Output].Columns[Transaction_Type_Id]"
+                      name="Transaction_Type_Id"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Load_DimTransaction\OLE DB Source.Outputs[OLE DB Source Output].Columns[TransactionType]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Load_DimTransaction\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[TransactionType]"
+                      length="100"
+                      lineageId="Package\Load_DimTransaction\OLE DB Source.Outputs[OLE DB Source Output].Columns[TransactionType]"
+                      name="TransactionType"
+                      truncationRowDisposition="FailComponent" />
+                  </outputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Load_DimTransaction\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Transaction_Type_Id]"
+                      dataType="i4"
+                      name="Transaction_Type_Id" />
+                    <externalMetadataColumn
+                      refId="Package\Load_DimTransaction\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[TransactionType]"
+                      codePage="1252"
+                      dataType="str"
+                      length="100"
+                      name="TransactionType" />
+                  </externalMetadataColumns>
+                </output>
+                <output
+                  refId="Package\Load_DimTransaction\OLE DB Source.Outputs[OLE DB Source Error Output]"
+                  isErrorOut="true"
+                  name="OLE DB Source Error Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Load_DimTransaction\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Transaction_Type_Id]"
+                      dataType="i4"
+                      lineageId="Package\Load_DimTransaction\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Transaction_Type_Id]"
+                      name="Transaction_Type_Id" />
+                    <outputColumn
+                      refId="Package\Load_DimTransaction\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[TransactionType]"
+                      codePage="1252"
+                      dataType="str"
+                      length="100"
+                      lineageId="Package\Load_DimTransaction\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[TransactionType]"
+                      name="TransactionType" />
+                    <outputColumn
+                      refId="Package\Load_DimTransaction\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Load_DimTransaction\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Load_DimTransaction\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Load_DimTransaction\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+          <paths>
+            <path
+              refId="Package\Load_DimTransaction.Paths[Derived Column Output]"
+              endId="Package\Load_DimTransaction\OLE DB Destination.Inputs[OLE DB Destination Input]"
+              name="Derived Column Output"
+              startId="Package\Load_DimTransaction\Derived Column.Outputs[Derived Column Output]" />
+            <path
+              refId="Package\Load_DimTransaction.Paths[Derived Column Output1]"
+              endId="Package\Load_DimTransaction\OLE DB Destination 1.Inputs[OLE DB Destination Input]"
+              name="Derived Column Output"
+              startId="Package\Load_DimTransaction\Derived Column 1.Outputs[Derived Column Output]" />
+            <path
+              refId="Package\Load_DimTransaction.Paths[Lookup Match Output]"
+              endId="Package\Load_DimTransaction\Conditional Split.Inputs[Conditional Split Input]"
+              name="Lookup Match Output"
+              startId="Package\Load_DimTransaction\Lookup.Outputs[Lookup Match Output]" />
+            <path
+              refId="Package\Load_DimTransaction.Paths[Lookup No Match Output]"
+              endId="Package\Load_DimTransaction\Derived Column.Inputs[Derived Column Input]"
+              name="Lookup No Match Output"
+              startId="Package\Load_DimTransaction\Lookup.Outputs[Lookup No Match Output]" />
+            <path
+              refId="Package\Load_DimTransaction.Paths[OLE DB Command Output]"
+              endId="Package\Load_DimTransaction\Derived Column 1.Inputs[Derived Column Input]"
+              name="OLE DB Command Output"
+              startId="Package\Load_DimTransaction\OLE DB Command.Outputs[OLE DB Command Output]" />
+            <path
+              refId="Package\Load_DimTransaction.Paths[OLE DB Source Output]"
+              endId="Package\Load_DimTransaction\Lookup.Inputs[Lookup Input]"
+              name="OLE DB Source Output"
+              startId="Package\Load_DimTransaction\OLE DB Source.Outputs[OLE DB Source Output]" />
+            <path
+              refId="Package\Load_DimTransaction.Paths[scd2]"
+              endId="Package\Load_DimTransaction\OLE DB Command.Inputs[OLE DB Command Input]"
+              name="scd2"
+              startId="Package\Load_DimTransaction\Conditional Split.Outputs[scd2]" />
+          </paths>
+        </pipeline>
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="8">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph">
+        <NodeLayout
+          Size="180,41.6"
+          Id="Package\Load_DimTransaction"
+          TopLeft="292.857143480559,169.764705733548" />
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+  <TaskHost
+    design-time-name="Package\Load_DimTransaction">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="16" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mssgm="clr-namespace:Microsoft.SqlServer.Graph.Model;assembly=Microsoft.SqlServer.Graph">
+        <NodeLayout
+          Size="152.8,41.6"
+          Id="Package\Load_DimTransaction\Derived Column"
+          TopLeft="96.4285716338426,180.470588077105" />
+        <NodeLayout
+          Size="162.4,41.6"
+          Id="Package\Load_DimTransaction\Derived Column 1"
+          TopLeft="303.571429217652,347.176470283922" />
+        <NodeLayout
+          Size="112.8,41.6"
+          Id="Package\Load_DimTransaction\Lookup"
+          TopLeft="251.428571963797,119.294117542493" />
+        <NodeLayout
+          Size="179.2,41.6"
+          Id="Package\Load_DimTransaction\OLE DB Destination 1"
+          TopLeft="299.285714922815,419.576470261132" />
+        <NodeLayout
+          Size="149.6,41.6"
+          Id="Package\Load_DimTransaction\OLE DB Source"
+          TopLeft="235.71428621606,21.4117646871141" />
+        <NodeLayout
+          Size="164.8,41.6"
+          Id="Package\Load_DimTransaction\OLE DB Command"
+          TopLeft="308.571429228296,262.294117417148" />
+        <NodeLayout
+          Size="154.4,41.6"
+          Id="Package\Load_DimTransaction\Conditional Split"
+          TopLeft="325.00000069184,191.176470420662" />
+        <NodeLayout
+          Size="170.4,41.6"
+          Id="Package\Load_DimTransaction\OLE DB Destination"
+          TopLeft="45.0000000957932,249.294117428543" />
+        <EdgeLayout
+          Id="Package\Load_DimTransaction.Paths[scd2]"
+          TopLeft="402.20000069184,232.776470420662">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-11.228571463544,29.517646996486"
+              Start="0,0"
+              End="-11.228571463544,22.017646996486">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,10.758823498243" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,10.758823498243"
+                    Point2="0,14.758823498243"
+                    Point3="-4,14.758823498243" />
+                  <mssgle:LineSegment
+                    End="-7.22857146354403,14.758823498243" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-7.22857146354403,14.758823498243"
+                    Point2="-11.228571463544,14.758823498243"
+                    Point3="-11.228571463544,18.758823498243" />
+                  <mssgle:LineSegment
+                    End="-11.228571463544,22.017646996486" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <mssgm:EdgeLabel
+              BoundingBox="-16.260477138022,19.758823498243,21.2923828125,9.7490234375"
+              RelativePosition="Any" />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Load_DimTransaction.Paths[OLE DB Source Output]"
+          TopLeft="309.171429089928,63.0117646871141">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,56.2823528553788"
+              Start="0,0"
+              End="0,48.7823528553788">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,48.7823528553788" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Load_DimTransaction.Paths[OLE DB Command Output]"
+          TopLeft="387.871429222974,303.894117417148">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,43.282352866774"
+              Start="0,0"
+              End="0,35.782352866774">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,35.782352866774" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Load_DimTransaction.Paths[Lookup No Match Output]"
+          TopLeft="251.428571963797,140.094117542493">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-78.6000003299544,40.376470534612"
+              Start="0,0"
+              End="-78.6000003299544,32.876470534612">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="-74.6000003299544,0" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-74.6000003299544,0"
+                    Point2="-78.6000003299544,0"
+                    Point3="-78.6000003299544,4" />
+                  <mssgle:LineSegment
+                    End="-78.6000003299544,32.876470534612" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <mssgm:EdgeLabel
+              BoundingBox="-134.406387048704,-17.609375,111.6127734375,11.609375"
+              RelativePosition="Any" />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Load_DimTransaction.Paths[Lookup Match Output]"
+          TopLeft="307.828571963797,160.894117542493">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="94.371428728043,30.282352878169"
+              Start="0,0"
+              End="94.371428728043,22.782352878169">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,11.1411764390845" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,11.1411764390845"
+                    Point2="0,15.1411764390845"
+                    Point3="4,15.1411764390845" />
+                  <mssgle:LineSegment
+                    End="90.371428728043,15.1411764390845" />
+                  <mssgle:CubicBezierSegment
+                    Point1="90.371428728043,15.1411764390845"
+                    Point2="94.371428728043,15.1411764390845"
+                    Point3="94.371428728043,19.1411764390845" />
+                  <mssgle:LineSegment
+                    End="94.371428728043,22.782352878169" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <mssgm:EdgeLabel
+              BoundingBox="-1.00567235472851,20.1411764390845,96.3827734375,11.609375"
+              RelativePosition="Any" />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Load_DimTransaction.Paths[Derived Column Output1]"
+          TopLeft="386.828572070234,388.776470283922">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,30.79999997721"
+              Start="0,0"
+              End="0,23.29999997721">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,23.29999997721" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Load_DimTransaction.Paths[Derived Column Output]"
+          TopLeft="172.828571633843,222.070588077105">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-42.6285715380494,27.223529351438"
+              Start="0,0"
+              End="-42.6285715380494,19.723529351438">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,9.61176467571899" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,9.61176467571899"
+                    Point2="0,13.611764675719"
+                    Point3="-4,13.611764675719" />
+                  <mssgle:LineSegment
+                    End="-38.6285715380494,13.611764675719" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-38.6285715380494,13.611764675719"
+                    Point2="-42.6285715380494,13.611764675719"
+                    Point3="-42.6285715380494,17.611764675719" />
+                  <mssgle:LineSegment
+                    End="-42.6285715380494,19.723529351438" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\Load_DimTransaction\Lookup">
+    <Properties>
+      <Property>
+        <Name>OverwriteParamsSQLProp</Name>
+        <Value
+          type="q2:string">false</Value>
+      </Property>
+      <Property>
+        <Name>UsedTableName</Name>
+        <Value
+          type="q3:string">[dbo].[Dim transaction]</Value>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q4:string">0</Value>
+      </Property>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\Load_DimTransaction\OLE DB Destination 1">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\Load_DimTransaction\OLE DB Source">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\Load_DimTransaction\OLE DB Destination">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>

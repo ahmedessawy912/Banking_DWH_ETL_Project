@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.37614.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{C9674DCB-5085-4A16-B785-4C70DD1589BD}") = "Banking_ETL_Project", "Banking_ETL_Project.dtproj", "{8BC92933-1C96-9C93-E31C-90EFD5A880AA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Development|Default = Development|Default
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8BC92933-1C96-9C93-E31C-90EFD5A880AA}.Development|Default.ActiveCfg = Development
+		{8BC92933-1C96-9C93-E31C-90EFD5A880AA}.Development|Default.Build.0 = Development
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {78D213CB-CA2C-4205-97CF-F8D5A300DDDA}
+	EndGlobalSection
+EndGlobal
