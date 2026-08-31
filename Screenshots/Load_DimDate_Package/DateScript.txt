@@ -1,0 +1,75 @@
+WITH DateRange AS
+(
+    SELECT CAST('2000-01-01' AS DATE) AS DateValue
+
+    UNION ALL
+
+    SELECT DATEADD(DAY, 1, DateValue)
+    FROM DateRange
+    WHERE DateValue < '2030-12-31'
+)
+INSERT INTO [dbo].[DimDate]
+(
+    DateSK,
+    [Date],
+    [Day],
+    DaySuffix,
+    DayOfWeek,
+    DOWInMonth,
+    DayOfYear,
+    WeekOfYear,
+    WeekOfMonth,
+    [Month],
+    MonthName,
+    [Quarter],
+    QuarterName,
+    [Year],
+    StandardDate,
+    HolidayText
+)
+SELECT
+    YEAR(DateValue) * 10000
+        + MONTH(DateValue) * 100
+        + DAY(DateValue)                    AS DateSK,
+
+    DateValue                               AS [Date],
+
+    RIGHT('0' + CAST(DAY(DateValue) AS VARCHAR(2)), 2)
+                                             AS [Day],
+
+    CASE
+        WHEN DAY(DateValue) IN (11, 12, 13) THEN 'th'
+        WHEN DAY(DateValue) % 10 = 1 THEN 'st'
+        WHEN DAY(DateValue) % 10 = 2 THEN 'nd'
+        WHEN DAY(DateValue) % 10 = 3 THEN 'rd'
+        ELSE 'th'
+    END                                      AS DaySuffix,
+
+    DATENAME(WEEKDAY, DateValue)             AS DayOfWeek,
+
+    ((DAY(DateValue) - 1) / 7) + 1           AS DOWInMonth,
+
+    DATEPART(DAYOFYEAR, DateValue)            AS DayOfYear,
+
+    DATEPART(WEEK, DateValue)                 AS WeekOfYear,
+
+    ((DAY(DateValue) - 1) / 7) + 1           AS WeekOfMonth,
+
+    RIGHT('0' + CAST(MONTH(DateValue) AS VARCHAR(2)), 2)
+                                             AS [Month],
+
+    DATENAME(MONTH, DateValue)                AS MonthName,
+
+    DATEPART(QUARTER, DateValue)              AS [Quarter],
+
+    'Q' + CAST(DATEPART(QUARTER, DateValue) AS VARCHAR(1))
+                                             AS QuarterName,
+
+    CAST(YEAR(DateValue) AS CHAR(4))          AS [Year],
+
+    CONVERT(VARCHAR(10), DateValue, 23)       AS StandardDate,
+
+    NULL                                      AS HolidayText
+
+FROM DateRange
+OPTION (MAXRECURSION 0);
