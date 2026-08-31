@@ -65,25 +65,30 @@ This project simulates a real-world banking ETL scenario. It covers the core SSI
 ├── Banking_ETL_Project/              # SSIS Visual Studio solution
 │   ├── Banking_ETL_Project.sln
 │   ├── Banking_ETL_Project.dtproj
+│   ├── Banking_ETL_Project.database
 │   ├── Project.params
 │   ├── Master.dtsx
 │   ├── Load_DimDate.dtsx
 │   ├── Load_DimAccountCustomer.dtsx
 │   ├── Load_DimAtmBranch.dtsx
 │   ├── Load_DimTransaction.dtsx
-│   └── Load_FactTransaction.dtsx
-├── Screenshots/                     # Package designs & test evidence
+│   ├── Load_FactTransaction.dtsx
+│   └── .gitkeep
+├── Screenshots/                     # Package designs, connection diagrams & test evidence
 │   ├── Load_DimAccountCustomer_Package/
 │   ├── Load_DimAtmBranch_Package/
 │   ├── Load_DimDate_Package/
 │   ├── Load_DimTransaction_Package/
 │   ├── Load_FactTransaction_Package/
 │   ├── Master_Package/
-│   └── Running and Testing/         # Before/after SCD & incremental-load proof
+│   ├── Running and Testing/         # Before/after SCD & incremental-load proof
+│   ├── Union_Bank(Source).png       # Source OLTP connection manager
+│   ├── Bank_DWH(Distenation).png    # Target DWH connection manager
+│   └── Project Parameters.png       # Project-level parameters
 ├── meta_data.sql                    # Seeds meta_Control_Fact watermark row
-├── Update for Testing.sql           # Sample updates to trigger SCD changes
-├── Delete for Test.txt              # Resets DWH tables for a clean re-run
-└── SSIS_Project_UseCase.pdf         # Full technical specification
+├── Banking_ETL_Project.pdf          # Full technical specification
+├── .gitattributes
+└── .gitignore
 ```
 
 ## Getting Started
@@ -94,8 +99,6 @@ This project simulates a real-world banking ETL scenario. It covers the core SSI
 4. Open `Banking_ETL_Project/Banking_ETL_Project.sln` in Visual Studio.
 5. Verify the `OLTP_Server` and `DWH_Server` project parameters point to your SQL Server instance.
 6. Run `Master.dtsx` to execute the full pipeline in order.
-7. To verify incremental loading and SCD behavior, apply `Update for Testing.sql` to the source data and re-run `Master.dtsx` — dimension history rows and only the newly changed data should appear.
-8. Use `Delete for Test.txt` to reset the warehouse tables for a clean re-test.
 
 ## Testing Evidence
 
